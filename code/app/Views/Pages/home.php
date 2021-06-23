@@ -57,16 +57,16 @@
     </style>
 </head>
 <body>
-<div class="flex-center position-ref full-height">
-    <div class="content">
-        <div class="title m-b-md">
-            <?php echo($app) ?>
-        </div>
+    <div class="flex-center position-ref full-height">
+        <div class="content">
+            <div class="title m-b-md">
+                <?php echo($app) ?>
+            </div>
 
-        <div class="links">
-            <a href="https://github.com/StefanoMantero/internship">Documentation</a>
+            <div class="links">
+                <a href="https://github.com/StefanoMantero/internship">Documentation</a>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>

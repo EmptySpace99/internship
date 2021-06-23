@@ -98,7 +98,8 @@ class Route
         $definedUri =  self::tokenize($this->uri);
 
         $discoveredTokens = array_filter($requestedUri,function($v,$k) use ($definedUri){
-            if(isset($definedUri[$k])&&$v==$definedUri[$k]) /*Token exists and is the same*/
+            #$definedUri[$k] = isset($definedUri[$k]) ? $definedUri[$k] : null;
+            if(isset($definedUri[$k]) && $v==$definedUri[$k]) /*Token exists and is the same*/
                 return true;
             elseif($v!=$definedUri[$k] && !preg_match(URI_REGEX_TOKEN_MATCH,$definedUri[$k])) /*Token is different but does not match the white card syntax*/
                 return false;
