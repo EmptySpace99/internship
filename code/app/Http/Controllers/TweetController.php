@@ -55,7 +55,7 @@ class TweetController
 
         if(is_null($id) || is_null($content) || (!is_null($content) && $content=="")) return;
 
-        $tweet = Tweet::update(array("id","content"=>$content,"modified_at"=>"CURRENT_TIMESTAMP()"));
+        $tweet = Tweet::update(array("id"=>$id,"content"=>$content));
 
         return Response::redirect(explode("/",$request->uri)[0]."/tweets");
     }

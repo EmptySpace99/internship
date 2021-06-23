@@ -28,7 +28,7 @@
                     id:". $t->id."<br>
                     content:". $t->content."<br>
                     created_at:". $t->created_at."<br>
-                    modified_at:". $t->modified_at ."<br>
+                    modified_at:". $t->updated_at ."<br>
                     <div> <button id='modify-tweet'> <b>Modify</b> </button> 
                     <button id='delete-tweet'> <b>Delete</b> </button> </div> 
                     </div><br>";
