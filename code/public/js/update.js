@@ -49,7 +49,7 @@ async function updateTweet(tweet){
     id = tweet.attr("data-id");
     content = tweet.find(".tweet-area").html();
     
-    res = await fetch(`http://localhost:8080/api/tweet/update/${id}`,{
+    res = await fetch(`http://localhost:8080/api/tweet/${id}`,{
         method: "PATCH",
         headers:{
             "Content-Type":"application/json"
@@ -59,11 +59,13 @@ async function updateTweet(tweet){
         })
     });
 
-    console.log(res, res.json());
-
     if(res.ok && res.status=="200"){
+        res.json().then(data => {
+            console.log(data);
+        });
         console.log("UPDATED with success");
         disableEdit(tweet);
+        return;
     }
     
     console.log("PATCH request error");
