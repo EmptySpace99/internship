@@ -57,8 +57,7 @@ class TweetController
     * Update tweet by id
     */
     public function updateTweet(Request $request, $id){
-        $vars = $request->query;
-        $content = trim($vars->get('content'));
+        $content = json_decode($request->content, true)["content"];
 
         if(is_null($id) || is_null($content) || $content=="") return Response::code(Response::HTTP_NOT_FOUND);
 
