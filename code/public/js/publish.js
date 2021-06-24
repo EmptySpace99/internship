@@ -5,7 +5,7 @@ $(()=>{
 function publishTweet(){
 
     $.ajax({
-        url: '/api/tweet/create',
+        url: '/api/tweet',
         type: 'POST',
         data:{
             content:$("#tweetArea").val()
