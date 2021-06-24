@@ -13,7 +13,7 @@ async function deleteTweet(deleteBtn){
     tweet = $(deleteBtn).parent().parent().eq(0);
     id = tweet.attr("data-id");
 
-    res = await fetch(`http://localhost:8080/api/tweet/delete/${id}`,{
+    res = await fetch(`http://localhost:8080/api/tweet/${id}`,{
         method: "DELETE",
     });
 
