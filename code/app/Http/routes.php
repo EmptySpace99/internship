@@ -14,5 +14,5 @@ Router::get('/tweet/create',['use'=>'TweetController@createTweet']);
 Router::get('/api/tweets',['use'=>'TweetController@allTweets']);
 Router::post('/api/tweet/create',['use'=>'TweetController@storeTweet']);
 Router::get('/api/tweet/read/{id}',['use'=>'TweetController@readTweet']);
-Router::patch('/api/tweet/update',['use'=>'TweetController@updateTweet']);
+Router::patch('/api/tweet/update/{id}',['use'=>'TweetController@updateTweet']);
 Router::delete('/api/tweet/delete/{id}',['use'=>'TweetController@deleteTweet']);

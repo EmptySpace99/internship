@@ -10,15 +10,16 @@ $(()=>{
  * @returns 
  */
 async function deleteTweet(deleteBtn){
-    id = $(deleteBtn).parent().parent().eq(0).find(".tweet-id").html();
-    
+    tweet = $(deleteBtn).parent().parent().eq(0);
+    id = tweet.attr("data-id");
+
     res = await fetch(`http://localhost:8080/api/tweet/delete/${id}`,{
         method: "DELETE",
     });
 
     if(res.ok && res.status=="204"){
         console.log("DELETED with success");
-        $(deleteBtn).parent().parent().eq(0).remove();
+        tweet.remove();
         return;
     }
     

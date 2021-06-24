@@ -9,15 +9,17 @@ class TweetController
     */
     public function allTweets()
     {
-        return Tweet::all();
+        return  Response::json(Tweet::all());
     }
+
 
     /*
     * Redirect to allTweets view
     */
     public function showTweets(){
-        return new View('viewTweets.php', ['allTweets' => self::allTweets()]);
+        return new View('viewTweets.php', ['allTweets' => Tweet::all()]);
     }
+
 
     /*
     * Redirect to createTweet view
@@ -26,44 +28,44 @@ class TweetController
         return new View("createTweet.php");
     }
 
+
     /*
-    * Store tweet in db and redirect to visualize all tweets
+    * Store tweet
     */
     public function storeTweet(Request $request){
         $content = trim($request->request->get('content'));
 
-        if(is_null($content) || $content=="") return;
+        if(is_null($content) || $content=="") return Response::code(Response::HTTP_NO_CONTENT);
 
-        return Tweet::create([
+        return Response::json(Tweet::create([
             'content' => $content,
-        ]);
-
+        ]));
     }
+
 
     /*
     * Find tweet by id
     */
     public function readTweet(Request $request, $id){
-        if(is_null($id)) return;
+        if(is_null($id)) return Response::code(Response::HTTP_NOT_FOUND);
 
-        return Tweet::first("id",$id);
+        return Response::json(Tweet::first("id",$id));
     }
 
 
     /*
     * Update tweet by id
     */
-    public function updateTweet(Request $request){
+    public function updateTweet(Request $request, $id){
         $vars = $request->query;
         $content = trim($vars->get('content'));
-        $id = $vars->get('id');
 
         if(is_null($id) || is_null($content) || $content=="") return Response::code(Response::HTTP_NOT_FOUND);
 
-        return Tweet::update(array(
+        return Response::json(Tweet::update(array(
             "id"=>$id,
             "content"=>$content
-        ));
+        )));
     }
 
 
@@ -73,7 +75,7 @@ class TweetController
     public function deleteTweet(Request $request, $id){
         if(is_null($id)) return Response::code(Response::HTTP_NOT_FOUND);
 
-        Tweet::delete("id",$id);
+        Tweet::destroy("id","=",$id);
         return Response::code(Response::HTTP_NO_CONTENT);
     }
 }
