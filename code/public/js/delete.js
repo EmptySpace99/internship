@@ -1,30 +1,26 @@
 $(()=>{
-    $("#delete-tweet").click(()=>deleteTweet());
+    $(".delete-tweet").click(function(e){
+        deleteTweet(e.currentTarget);
+    });
 })
 
-function deleteTweet(){
-
-    $.ajax({
-        url: '/tweet/delete',
-        type: 'DELETE',
-        data:{
-            id:$("#delete-tweet").parent().find(".tweet-id").val()
-        }
-
-    })
-    .done(function(response){
-        console.log(response); //debug
-
-        try {
-            response = JSON.parse(response);
-            console.log(response);
-        } 
-        catch (error) {
-            console.log(error);
-        }
-        
-    })
-    .fail(function(){
-        console.log('request failed');
+/**
+ * 
+ * @param {<button> element} deleteBtn 
+ * @returns 
+ */
+async function deleteTweet(deleteBtn){
+    id = $(deleteBtn).parent().parent().eq(0).find(".tweet-id").html();
+    
+    res = await fetch(`http://localhost:8080/api/tweet/delete/${id}`,{
+        method: "DELETE",
     });
+
+    if(res.ok && res.status=="204"){
+        console.log("DELETED with success");
+        $(deleteBtn).parent().parent().eq(0).remove();
+        return;
+    }
+    
+    console.log("DELETE request error");
 }

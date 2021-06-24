@@ -4,11 +4,19 @@ require_once(__DIR__ . '/../../Models/Tweet.php');
 
 class TweetController
 {
+    /*
+    * Return all tweets
+    */
     public function allTweets()
     {
-        $tweets = Tweet::all();
+        return Tweet::all();
+    }
 
-        return new View('viewTweets.php', ['allTweets' => $tweets]);
+    /*
+    * Redirect to allTweets view
+    */
+    public function showTweets(){
+        return new View('viewTweets.php', ['allTweets' => self::allTweets()]);
     }
 
     /*
@@ -24,50 +32,48 @@ class TweetController
     public function storeTweet(Request $request){
         $content = trim($request->request->get('content'));
 
-        if(is_null($content) || (!is_null($content) && $content=="")) return;
+        if(is_null($content) || $content=="") return;
 
-        Tweet::create([
+        return Tweet::create([
             'content' => $content,
         ]);
-  
-        return Response::redirect(explode("/",$request->uri)[0]."/tweets");
+
     }
 
     /*
     * Find tweet by id
     */
-    public function readTweet(Request $request){
-        $id = $request->request->get("id");
+    public function readTweet(Request $request, $id){
         if(is_null($id)) return;
 
-        $tweet = Tweet::first("id",$request->query->get($id));
-
-        return new View('viewTweets.php', ['allTweets' => compact($tweet)]);
+        return Tweet::first("id",$id);
     }
 
+
     /*
-    * Update tweet just for content value
+    * Update tweet by id
     */
     public function updateTweet(Request $request){
-        $vars = $request->request;
+        $vars = $request->query;
         $content = trim($vars->get('content'));
         $id = $vars->get('id');
 
-        if(is_null($id) || is_null($content) || (!is_null($content) && $content=="")) return;
+        if(is_null($id) || is_null($content) || $content=="") return Response::code(Response::HTTP_NOT_FOUND);
 
-        $tweet = Tweet::update(array("id"=>$id,"content"=>$content));
-
-        return Response::redirect(explode("/",$request->uri)[0]."/tweets");
+        return Tweet::update(array(
+            "id"=>$id,
+            "content"=>$content
+        ));
     }
+
 
     /*
     * Delete tweet by id
     */
-    public function deleteTweet(Request $request){
-        if(is_null($request->request->get($id))) return;
+    public function deleteTweet(Request $request, $id){
+        if(is_null($id)) return Response::code(Response::HTTP_NOT_FOUND);
 
-        $tweet = Tweet::delete("id",$request->query->get("id"));
-
-        return Response::redirect(explode("/",$request->uri)[0]."/tweets");
+        Tweet::delete("id",$id);
+        return Response::code(Response::HTTP_NO_CONTENT);
     }
 }

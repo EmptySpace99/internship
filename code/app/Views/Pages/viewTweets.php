@@ -13,9 +13,12 @@
     <!-- Styles -->
     <link href="public/css/createTweet.css" rel="stylesheet" type="text/css">
 
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 <body>
-    <div class="flex-center position-ref full-height">
+    <div class="flex-center position-ref">
         <div class="content">
             <div class="title m-b-md">
                 Tweets
@@ -24,18 +27,21 @@
             <div><?php
 
                 foreach($allTweets as $t) {
-                    echo "<div><br>Tweet:<br>
-                    id:". $t->id."<br>
-                    content:". $t->content."<br>
-                    created_at:". $t->created_at."<br>
-                    modified_at:". $t->updated_at ."<br>
-                    <div> <button id='modify-tweet'> <b>Modify</b> </button> 
-                    <button id='delete-tweet'> <b>Delete</b> </button> </div> 
+                    echo "<div><b>Tweet:</b>
+                    <div>id:<span class='tweet-id'>". $t->id."</span></div>
+                    <div>content:<span class='tweet-content'>". $t->content."</span></div>
+                    <div>created_at:". $t->created_at."</div>
+                    <div>modified_at:". $t->updated_at ."</div>
+                    <div> <button class='modify-tweet'> <b>Modify</b> </button> 
+                    <button class='delete-tweet'> <b>Delete</b> </button> </div> 
                     </div><br>";
                 }
             
             ?></div>
         </div>
     </div>
+
+    <script src="public/js/update.js"></script>
+    <script src="public/js/delete.js"></script>
 </body>
 </html>
