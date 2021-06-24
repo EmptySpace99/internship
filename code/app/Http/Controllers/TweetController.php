@@ -54,7 +54,7 @@ class TweetController
 
 
     /*
-    * Update tweet by id
+    * Update tweet by id (a request with patch method has paramters in the raw body data)
     */
     public function updateTweet(Request $request, $id){
         $content = json_decode($request->content, true)["content"];
