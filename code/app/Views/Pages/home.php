@@ -18,18 +18,16 @@
 
 </head>
 <body>
-    <div class="flex-center column">
-        <div class="title m-b-md">
-            <div><?php echo $app?></div>
-        </div>
+    <div class="flex-center position-ref full-height">
+        <div class="content">
+            <div class="title m-b-md">
+                <?php echo($app) ?>
+            </div>
 
-        <div class="container column">
-            <textarea name="tweet-area" id="tweet-area" cols="30" rows="10"></textarea>
-            <button id='publish-tweet'>Publish</button>
+            <div class="links">
+                <a href="https://github.com/StefanoMantero/internship">Documentation</a>
+            </div>
         </div>
     </div>
-
-    <script src="js/publish.js"></script>
-    <script src="js/tweet.js"></script>
 </body>
 </html>

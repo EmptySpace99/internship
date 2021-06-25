@@ -89,6 +89,14 @@ abstract class Model
         return null;
     }
 
+    public static function innerJoin($model, string $col1j, string $expj, string $col2j, string $col1, string $exp, string $col2){
+        self::checkConnection();
+        return self::$db->selectFrom(self::getTableName())
+            ->innerJoin($model::getTableName(), $col1j, $expj, $col2j)
+            ->where($col2, $exp, $col2)
+            ->get();
+    }
+
     public static function getTableName() {
         return Tools::pascal_case_to_snake_case(get_called_class());
     }
