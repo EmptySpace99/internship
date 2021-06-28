@@ -19,10 +19,9 @@ class QueryStatement
         $this->orm = false;
     }
 
-    public function where($col1, $exp, $col2)
+    public function andWhere($col1, $exp, $col2)
     {
-        #$this->clauses .= empty($this->clauses) ? 'WHERE ' : 'AND ';
-        $this->clauses .= 'WHERE ';
+        $this->clauses .= empty($this->clauses) ? 'WHERE ' : 'AND ';
         $this->clauses .= "$col1 $exp $col2\n";
         return $this;
     }
@@ -31,6 +30,11 @@ class QueryStatement
     {
         $this->clauses .= empty($this->clauses) ? 'WHERE ' : 'OR ';
         $this->clauses .= "$col1 $exp $col2\n";
+        return $this;
+    }
+
+    public function where($col1, $exp, $col2){
+        $this->clauses .= !empty($this->clauses) ? "WHERE $col1 $exp $col2\n" : '';
         return $this;
     }
 
@@ -47,28 +51,32 @@ class QueryStatement
     }
 
     public function innerJoin(string $table2,  string $col1, string $exp, string $col2){
-        $this->clauses .= "INNER JOIN $table2 ON $col1 $exp $table2.$col2\n";
+        $this->clauses .= "INNER JOIN $table2 ON $col1 $exp $table2.$col2 \n";
         return $this;
     }
 
     public function rightJoin(string $table2,  string $col1, string $exp, string $col2){
-        $this->clauses .= "RIGHT JOIN $table2 ON $col1 $exp $table2.$col2\n";
+        $this->clauses .= "RIGHT JOIN $table2 ON $col1 $exp $table2.$col2 \n";
         return $this;
     }
 
     public function leftJoin(string $table2, string $col1, string $exp, string $col2){
-        $this->clauses .= "LEFT JOIN $table2 ON $col1 $exp $table2.$col2\n";
+        $this->clauses .= "LEFT JOIN $table2 ON $col1 $exp $table2.$col2 \n";
         return $this;
     }
 
     public function fullJoin(string $table2, string $col1, string $exp, string $col2){
-        $this->clauses .= "FULL JOIN $table2 ON $col1 $exp $table2.$col2\n";
+        $this->clauses .= "FULL JOIN $table2 ON $col1 $exp $table2.$col2 \n";
         return $this;
     }
 
     public function crossJoin(string $table2){
-        $this->clauses .= "CROSS JOIN $table2";
+        $this->clauses .= "CROSS JOIN $table2 \n";
         return $this;
+    }
+
+    public function getclauses(){
+        return $this->clauses;
     }
 
 }

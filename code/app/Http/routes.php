@@ -19,7 +19,7 @@ Router::delete('/api/tweet/{id}',['use'=>'TweetController@deleteTweet']);
 /*
 * Comment API
 */
-Router::get('/api/comment/all/{tweet_id}',['use'=>'CommentController@allComments']);
+Router::get('/api/comments/{tweet_id}',['use'=>'CommentController@allComments']);
 Router::post('/api/comment',['use'=>'CommentController@storeComment']);
 Router::get('/api/comment/{id}',['use'=>'CommentController@readComment']);
 Router::patch('/api/comment/{id}',['use'=>'CommentController@updateComment']);

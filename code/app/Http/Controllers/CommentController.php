@@ -10,9 +10,11 @@ class CommentController
     */
     public function allComments(Request $request, $tweet_id)
     {
+
         if(is_null($tweet_id)) return Response::code(Response::HTTP_NOT_FOUND);
 
-        return  Response::json(Comment::innerJoin(Tweet::class,"tweet_id","=","id","tweet_id","=", $tweet_id));
+        Comment::innerJoin(Tweet::class,"tweet_id","=","id");
+        return  Response::json(Comment::whereWithQuery("tweet_id","=", $tweet_id));
     }
 
 
@@ -39,7 +41,8 @@ class CommentController
     public function readComment(Request $request, $id){
         if(is_null($id)) return Response::code(Response::HTTP_NOT_FOUND);
 
-        return Response::json(Comment::first("id",$id));
+        $comment = Comment::first("id",$id);
+        return Response::json(is_null($comment) ? compact("") : $comment);
     }
 
 

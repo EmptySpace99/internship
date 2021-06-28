@@ -29,7 +29,7 @@ abstract class Model
         self::checkConnection();
         unset($vars['id']);
         return self::$db->update(self::getTableName(), $vars)
-            ->where('id', '=', $this->id)
+            ->andWhere('id', '=', $this->id)
             ->commit();
     }
 
@@ -38,7 +38,7 @@ abstract class Model
         $vars = get_object_vars($this);
         unset($vars['id']);
         return self::$db->update(self::getTableName(), $vars)
-            ->where('id', '=', $this->id)
+            ->andWhere('id', '=', $this->id)
             ->commit();
     }
 
@@ -49,7 +49,7 @@ abstract class Model
     public static function destroy($col1, $exp, $col2): bool {
         self::checkConnection();
         return self::$db->deleteFrom(self::getTableName())
-            ->where($col1, $exp, $col2)
+            ->andWhere($col1, $exp, $col2)
             ->commit();
     }
 
@@ -75,7 +75,13 @@ abstract class Model
         self::checkConnection();
         return self::$db->selectFrom(self::getTableName())
             ->orm(true, get_called_class())
-            ->where($col1, $exp, $col2);
+            ->andWhere($col1, $exp, $col2);
+    }
+
+    public static function whereWithQuery($col1, $exp, $col2) {
+        self::checkConnection();
+
+        return self::where($col1, $exp, $col2)->get();
     }
 
     public static function create(array $data) {
@@ -89,12 +95,49 @@ abstract class Model
         return null;
     }
 
-    public static function innerJoin($model, string $col1j, string $expj, string $col2j, string $col1, string $exp, string $col2){
+    public static function innerJoin($modelClassName, string $col1j, string $expj, string $col2j){
         self::checkConnection();
+
+        if(is_null($modelClassName)) return null;
+
         return self::$db->selectFrom(self::getTableName())
-            ->innerJoin($model::getTableName(), $col1j, $expj, $col2j)
-            ->where($col2, $exp, $col2)
-            ->get();
+            ->innerJoin($modelClassName::getTableName(), $col1j, $expj, $col2j);
+    }
+
+    public static function rightJoin($modelClassName, string $col1j, string $expj, string $col2j){
+        self::checkConnection();
+
+        if(is_null($modelClassName)) return null;
+
+        return self::$db->selectFrom(self::getTableName())
+            ->rightJoin($modelClassName::getTableName(), $col1j, $expj, $col2j);
+    }
+
+    public static function leftJoin($modelClassName, string $col1j, string $expj, string $col2j){
+        self::checkConnection();
+
+        if(is_null($modelClassName)) return null;
+
+        return self::$db->selectFrom(self::getTableName())
+            ->leftJoin($modelClassName::getTableName(), $col1j, $expj, $col2j);
+    }
+
+    public static function fullJoin($modelClassName, string $col1j, string $expj, string $col2j){
+        self::checkConnection();
+
+        if(is_null($modelClassName)) return null;
+
+        return self::$db->selectFrom(self::getTableName())
+            ->fullJoin($modelClassName::getTableName(), $col1j, $expj, $col2j);
+    }
+
+    public static function crossJoin($modelClassName, string $col1j, string $expj, string $col2j){
+        self::checkConnection();
+
+        if(is_null($modelClassName)) return null;
+
+        return self::$db->selectFrom(self::getTableName())
+            ->crossJoin($modelClassName::getTableName(), $col1j, $expj, $col2j);
     }
 
     public static function getTableName() {
