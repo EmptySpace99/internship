@@ -10,6 +10,7 @@ Router::get('/tweet',['use'=>'TweetController@createTweet']);
 /*
 * Tweet API
 */
+Router::get('/api/tweet/{id}/comments',['use'=>'TweetController@allComments']);
 Router::get('/api/tweet',['use'=>'TweetController@allTweets']);
 Router::post('/api/tweet',['use'=>'TweetController@storeTweet']);
 Router::get('/api/tweet/{id}',['use'=>'TweetController@readTweet']);

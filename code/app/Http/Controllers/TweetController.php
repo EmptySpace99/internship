@@ -12,6 +12,13 @@ class TweetController
         return  Response::json(Tweet::all());
     }
 
+    public function AllComments(Request $request, $id){
+        if(is_null($id) || !is_numeric($id)) return Response::code(Response::HTTP_NOT_FOUND);
+        $tweet = Tweet::first("id",$id);
+
+        return Response::json($tweet->comments());
+    }
+
 
     /*
     * Redirect to allTweets view
@@ -47,7 +54,7 @@ class TweetController
     * Find tweet by id
     */
     public function readTweet(Request $request, $id){
-        if(is_null($id)) return Response::code(Response::HTTP_NOT_FOUND);
+        if(is_null($id) || !is_numeric($id)) return Response::code(Response::HTTP_NOT_FOUND);
 
         return Response::json(Tweet::first("id",$id));
     }
@@ -59,7 +66,7 @@ class TweetController
     public function updateTweet(Request $request, $id){
         $content = json_decode($request->content, true)["content"];
 
-        if(is_null($id) || is_null($content) || $content=="") return Response::code(Response::HTTP_NOT_FOUND);
+        if(is_null($id) || !is_numeric($id) || is_null($content) || $content=="") return Response::code(Response::HTTP_NOT_FOUND);
 
         $tweet = Tweet::first("id",$id);
         $tweet->content = $content;
@@ -74,7 +81,7 @@ class TweetController
     * Delete tweet by id
     */
     public function deleteTweet(Request $request, $id){
-        if(is_null($id)) return Response::code(Response::HTTP_NOT_FOUND);
+        if(is_null($id) || !is_numeric($id)) return Response::code(Response::HTTP_NOT_FOUND);
 
         if(Tweet::destroy("id","=",$id)) return Response::code(Response::HTTP_NO_CONTENT);
 

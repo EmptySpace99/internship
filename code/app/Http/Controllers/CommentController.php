@@ -10,8 +10,7 @@ class CommentController
     */
     public function allComments(Request $request, $tweet_id)
     {
-
-        if(is_null($tweet_id)) return Response::code(Response::HTTP_NOT_FOUND);
+        if(is_null($tweet_id) || !is_numeric($tweet_id)) return Response::code(Response::HTTP_NOT_FOUND);
 
         Comment::innerJoin(Tweet::class,"tweet_id","=","id");
         return  Response::json(Comment::whereWithQuery("tweet_id","=", $tweet_id));
@@ -26,7 +25,7 @@ class CommentController
         $content = trim($vars->get("content"));
         $tweet_id = $vars->get("tweet_id");
 
-        if(is_null($tweet_id) || is_null($content) || $content=="") return Response::code(Response::HTTP_NO_CONTENT);
+        if(is_null($tweet_id) || !is_numeric($tweet_id) || is_null($content) || $content=="") return Response::code(Response::HTTP_NO_CONTENT);
 
         return Response::json(Comment::create([
             "tweet_id" => $tweet_id,
@@ -39,7 +38,7 @@ class CommentController
     * Find comment by id
     */
     public function readComment(Request $request, $id){
-        if(is_null($id)) return Response::code(Response::HTTP_NOT_FOUND);
+        if(is_null($id) || !is_numeric($id)) return Response::code(Response::HTTP_NOT_FOUND);
 
         $comment = Comment::first("id",$id);
         return Response::json(is_null($comment) ? compact("") : $comment);
@@ -52,7 +51,7 @@ class CommentController
     public function updateComment(Request $request, $id){
         $content = json_decode($request->content, true)["content"];
 
-        if(is_null($id) || is_null($content) || $content=="") return Response::code(Response::HTTP_NOT_FOUND);
+        if(is_null($id) || !is_numeric($id) || is_null($content) || $content=="") return Response::code(Response::HTTP_NOT_FOUND);
 
         $comment = Comment::first("id",$id);
         $comment->content = $content;
@@ -67,7 +66,7 @@ class CommentController
     * Delete comment by id
     */
     public function deleteComment(Request $request, $id){
-        if(is_null($id)) return Response::code(Response::HTTP_NOT_FOUND);
+        if(is_null($id) || !is_numeric($id)) return Response::code(Response::HTTP_NOT_FOUND);
 
         if(comment::destroy("id","=",$id)) return Response::code(Response::HTTP_NO_CONTENT);
 
