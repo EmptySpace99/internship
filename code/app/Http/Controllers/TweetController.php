@@ -12,7 +12,7 @@ class TweetController
         return  Response::json(Tweet::all());
     }
 
-    public function AllComments(Request $request, $id){
+    public function allComments(Request $request, $id){
         if(is_null($id) || !is_numeric($id)) return Response::code(Response::HTTP_NOT_FOUND);
         $tweet = Tweet::first("id",$id);
 

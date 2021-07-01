@@ -16,6 +16,12 @@ class CommentController
         return  Response::json(Comment::whereWithQuery("tweet_id","=", $tweet_id));
     }
 
+    public function getTweet(Request $request, $tweet_id){
+        if(is_null($id) || !is_numeric($id)) return Response::code(Response::HTTP_NOT_FOUND);
+        $comment = Comment::first("id",$id);
+
+        return Response::json($comment->tweet());
+    }
 
     /*
     * Store comment
