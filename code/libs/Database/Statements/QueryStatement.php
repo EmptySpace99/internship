@@ -50,33 +50,20 @@ class QueryStatement
         return $this;
     }
 
-    public function innerJoin(string $table2,  string $col1, string $exp, string $col2){
-        $this->clauses .= "INNER JOIN $table2 ON $col1 $exp $table2.$col2 \n";
-        return $this;
-    }
+    public function joinWith(string $table, $col1, $exp, $col2, $joinType)
+    {
+        $joinTypes = array("INNER","RIGHT","LEFT","FULL","CROSS");
 
-    public function rightJoin(string $table2,  string $col1, string $exp, string $col2){
-        $this->clauses .= "RIGHT JOIN $table2 ON $col1 $exp $table2.$col2 \n";
-        return $this;
-    }
+        if(in_array($joinType, $joinTypes)){
 
-    public function leftJoin(string $table2, string $col1, string $exp, string $col2){
-        $this->clauses .= "LEFT JOIN $table2 ON $col1 $exp $table2.$col2 \n";
-        return $this;
-    }
+            if(strcmp($joinType,"CROSS")){
+                $this->clauses .= "CROSS JOIN $table \n";
+            }
 
-    public function fullJoin(string $table2, string $col1, string $exp, string $col2){
-        $this->clauses .= "FULL JOIN $table2 ON $col1 $exp $table2.$col2 \n";
-        return $this;
-    }
+            $this->clauses .= "$joinType JOIN $table ON $col1 $exp $table.$col2 \n";
+        }
 
-    public function crossJoin(string $table2){
-        $this->clauses .= "CROSS JOIN $table2 \n";
-        return $this;
-    }
-
-    public function getclauses(){
-        return $this->clauses;
+        return this;
     }
 
 }
