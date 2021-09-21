@@ -17,9 +17,8 @@ class CommentController
     }
 
     public function getTweet(Request $request, $tweet_id){
-        if(is_null($id) || !is_numeric($id)) return Response::code(Response::HTTP_NOT_FOUND);
-        $comment = Comment::first("id",$id);
-
+        if(is_null($tweet_id)) return Response::code(Response::HTTP_NOT_FOUND);
+        $comment = Comment::first("id",$tweet_id);
         return Response::json($comment->tweet());
     }
 
