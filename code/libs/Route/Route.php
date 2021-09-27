@@ -99,6 +99,14 @@ class Route
 
         $discoveredTokens = array_filter($requestedUri,function($v,$k) use ($definedUri){
 
+            /*Token doesn't exist or is different and doesn't match the white card syntax*/
+            if(!isset($definedUri[$k]) || ($v!=$definedUri[$k] && !preg_match(URI_REGEX_TOKEN_MATCH,$definedUri[$k]))) 
+                return false;
+
+            if($v==$definedUri[$k]) /*Token exists and is the same*/
+                return true;
+
+            return $this->addParam($v); /*Save the params in found order for white card token*/
         },ARRAY_FILTER_USE_BOTH );
 
         /*Migrate from Bitbucket missing check*/
