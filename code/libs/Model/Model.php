@@ -86,12 +86,6 @@ abstract class Model
             ->andWhere($col1, $exp, $col2);
     }
 
-    public static function whereWithQuery($col1, $exp, $col2) {
-        self::checkConnection();
-
-        return self::where($col1, $exp, $col2)->get();
-    }
-
     public static function create(array $data) {
         self::checkConnection();
         $lastId = self::$db->insertInto(self::getTableName(), $data)
@@ -103,49 +97,9 @@ abstract class Model
         return null;
     }
 
-    public static function innerJoin($modelClassName, string $col1, string $exp, string $col2){
+    public function select(array $columns = []){
         self::checkConnection();
-
-        if(is_null($modelClassName)) return null;
-
-        return self::$db->selectFrom(self::getTableName())
-            ->joinWith($modelClassName::getTableName(), $col1, $exp, $col2,"INNER");
-    }
-
-    public static function rightJoin($modelClassName, string $col1, string $exp, string $col2){
-        self::checkConnection();
-
-        if(is_null($modelClassName)) return null;
-
-        return self::$db->selectFrom(self::getTableName())
-            ->joinWith($modelClassName::getTableName(), $col1, $exp, $col2,"RIGHT");
-    }
-
-    public static function leftJoin($modelClassName, string $col1, string $exp, string $col2){
-        self::checkConnection();
-
-        if(is_null($modelClassName)) return null;
-
-        return self::$db->selectFrom(self::getTableName())
-            ->joinWith($modelClassName::getTableName(), $col1j, $expj, $col2j,"LEFT");
-    }
-
-    public static function fullJoin($modelClassName, string $col1, string $exp, string $col2){
-        self::checkConnection();
-
-        if(is_null($modelClassName)) return null;
-
-        return self::$db->selectFrom(self::getTableName())
-            ->joinWith($modelClassName::getTableName(), $col1, $exp, $col2, "FULL");
-    }
-
-    public static function crossJoin($modelClassName){
-        self::checkConnection();
-
-        if(is_null($modelClassName)) return null;
-
-        return self::$db->selectFrom(self::getTableName())
-            ->joinWith($modelClassName::getTableName(), "", "", "", "CROSS");
+        return self::$db->selectFrom(self::getTableName(), $columns);
     }
 
     public static function getTableName() {
