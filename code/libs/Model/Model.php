@@ -7,7 +7,11 @@ abstract class Model
     private static $db;
 
     public function hasOne($modelClassName) {
-        if (class_exists($modelClassName)) {
+        spl_autoload_register( function($class) {
+            require __DIR__."/../../app/Models/".Tools::pascal_case_to_snake_case($class) . '.php';
+        });
+
+        if (class_exists($modelClassName, true)) {
             $fnFirst = new ReflectionMethod($modelClassName, 'first');
             $fnGetTableName = new ReflectionMethod($modelClassName, 'getTableName');
             $fkField = $fnGetTableName->invoke(null) . '_id';
@@ -17,7 +21,11 @@ abstract class Model
     }
 
     public function hasMany($modelClassName): array {
-        if (class_exists($modelClassName)) {
+        spl_autoload_register( function($class) {
+            require __DIR__."/../../app/Models/".Tools::pascal_case_to_snake_case($class) . '.php';
+        });
+
+        if (class_exists($modelClassName, true)) {
             $staticMethod = new ReflectionMethod($modelClassName, 'find');
             $fk = self::getTableName() . '_id';
             return $staticMethod->invoke(null, $fk, $this->id);
@@ -29,7 +37,7 @@ abstract class Model
         self::checkConnection();
         unset($vars['id']);
         return self::$db->update(self::getTableName(), $vars)
-            ->where('id', '=', $this->id)
+            ->andWhere('id', '=', $this->id)
             ->commit();
     }
 
@@ -38,7 +46,7 @@ abstract class Model
         $vars = get_object_vars($this);
         unset($vars['id']);
         return self::$db->update(self::getTableName(), $vars)
-            ->where('id', '=', $this->id)
+            ->andWhere('id', '=', $this->id)
             ->commit();
     }
 
@@ -49,7 +57,7 @@ abstract class Model
     public static function destroy($col1, $exp, $col2): bool {
         self::checkConnection();
         return self::$db->deleteFrom(self::getTableName())
-            ->where($col1, $exp, $col2)
+            ->andWhere($col1, $exp, $col2)
             ->commit();
     }
 
@@ -75,7 +83,7 @@ abstract class Model
         self::checkConnection();
         return self::$db->selectFrom(self::getTableName())
             ->orm(true, get_called_class())
-            ->where($col1, $exp, $col2);
+            ->andWhere($col1, $exp, $col2);
     }
 
     public static function create(array $data) {
@@ -87,6 +95,11 @@ abstract class Model
             return self::first('id', $lastId);
         }
         return null;
+    }
+
+    public function select(array $columns = []){
+        self::checkConnection();
+        return self::$db->selectFrom(self::getTableName(), $columns);
     }
 
     public static function getTableName() {
