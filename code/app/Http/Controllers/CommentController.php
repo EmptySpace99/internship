@@ -12,8 +12,14 @@ class CommentController
     {
         if(is_null($tweet_id) || !is_numeric($tweet_id)) return Response::code(Response::HTTP_NOT_FOUND);
 
-        Comment::innerJoin(Tweet::class,"tweet_id","=","id");
-        return  Response::json(Comment::whereWithQuery("tweet_id","=", $tweet_id));
+        $columns = [
+            'tweet.id as tweet_id',
+            'comment.id as comment_id',
+            'tweet.content as tweet_content', 
+            'comment.content as comment_content'
+        ];
+        $res = Comment::select($columns)->innerJoin(Tweet::class,"tweet_id","=","id")->where('tweet.id','=',$tweet_id)->get();
+        return  Response::json($res);
     }
 
     public function getTweet(Request $request, $tweet_id){
