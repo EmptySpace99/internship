@@ -37,7 +37,7 @@ abstract class Model
         self::checkConnection();
         unset($vars['id']);
         return self::$db->update(self::getTableName(), $vars)
-            ->andWhere('id', '=', $this->id)
+            ->where('id', '=', $this->id)
             ->commit();
     }
 
@@ -46,7 +46,7 @@ abstract class Model
         $vars = get_object_vars($this);
         unset($vars['id']);
         return self::$db->update(self::getTableName(), $vars)
-            ->andWhere('id', '=', $this->id)
+            ->where('id', '=', $this->id)
             ->commit();
     }
 
@@ -57,7 +57,7 @@ abstract class Model
     public static function destroy($col1, $exp, $col2): bool {
         self::checkConnection();
         return self::$db->deleteFrom(self::getTableName())
-            ->andWhere($col1, $exp, $col2)
+            ->where($col1, $exp, $col2)
             ->commit();
     }
 
@@ -83,7 +83,7 @@ abstract class Model
         self::checkConnection();
         return self::$db->selectFrom(self::getTableName())
             ->orm(true, get_called_class())
-            ->andWhere($col1, $exp, $col2);
+            ->where($col1, $exp, $col2);
     }
 
     public static function create(array $data) {
